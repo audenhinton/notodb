@@ -1,0 +1,26 @@
+{
+  "name": "notodb",
+  "version": "1.0.0",
+  "description": "",
+  "main": "noto.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "zip -r ../notodb.zip * && aws lambda update-function-code --function-name notodb --zip-file fileb://../notodb.zip",
+    "start": "node start.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/audenhinton/notodb.git"
+  },
+  "author": "Auden Hinton",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/audenhinton/notodb/issues"
+  },
+  "homepage": "https://github.com/audenhinton/notodb#readme",
+  "dependencies": {
+    "aws-sdk": "^2.1130.0",
+    "express": "^4.18.1",
+    "serverless-http": "^3.0.1"
+  }
+}
