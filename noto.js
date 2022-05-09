@@ -207,12 +207,12 @@ class NotoDB {
             Object.keys(req.query).forEach((item, index) => {
 
                 let needle = req.query[item]
-                let operator = (needle.match(/^-?[0-9]\d*(\.\d+)?$/)) ? ` = ${needle} ` : ` = '${needle}' ` 
-
+                let operator = (needle.match(/^-?[0-9]\d*(\.\d+)?$/)) ? ` = ${needle} ` : ` = '${needle.replace(/(^"|"$)/g, '')}' ` 
+                
                 // check for comparison operators
                 if (needle.indexOf(":") > -1) {
 
-                    let value = needle.split(":")[1]
+                    let value = needle.split(":")[1].replace(/(^"|"$)/g, '')
 
                     switch (needle.split(":")[0]) {
 
