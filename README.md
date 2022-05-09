@@ -69,7 +69,7 @@ GET /{bucket}/sets
 Create a new empty set in NotoDB.
 
 ```
-POST /{bucket}/sets
+PUT /{bucket}/sets
 
 {
     "name": "setName"
@@ -91,7 +91,7 @@ GET /{bucket}/sets/{set}/items
 Add new items to a set. Example payload. Data is stored in JSON documents, there is no limit to number of keys your items can have.
 
 ```
-POST /{bucket}/sets/{set}/items
+PUT /{bucket}/sets/{set}/items
 
 {
     "first_name": "John",
@@ -115,7 +115,12 @@ PATCH /{bucket}/sets/{set}/items?first_name=John
 Query or search for items in a set.
 
 ```
-GET /{bucket}/sets/{set}/query?{someKey1}={value}&{someKey2}={value}
+POST /{bucket}/sets/{set}/query?{someKey1}={value}&{someKey2}={value}
+
+{
+    "count": "*",
+    "avg": "age"
+}
 
 ```
 You can query against any top-level keys in your items. We are working on adding queries for nested items. You can also use operators for matching and compairing values. Below is a list of available operators and how to use them.

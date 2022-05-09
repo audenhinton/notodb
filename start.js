@@ -35,13 +35,13 @@ app.get("/:bucket", (req, res) => { Noto.listBucketObjects(req, res) })
 
 // NotoDB specific methods
 app.get("/:bucket/sets", (req, res) => { Noto.listSets(req, res) })
-app.post("/:bucket/sets", (req, res) => { Noto.addSet(req, res) })
+app.put("/:bucket/sets", (req, res) => { Noto.addSet(req, res) })
 app.delete("/:bucket/sets/:set", (req, res) => { Noto.removeSet(req, res) })
 
 app.get("/:bucket/sets/:set/items", (req, res) => { Noto.listItems(req, res) })
-app.post("/:bucket/sets/:set/items", (req, res) => { Noto.addItems(req, res) })
+app.put("/:bucket/sets/:set/items", (req, res) => { Noto.addItems(req, res) })
 
-app.get("/:bucket/sets/:set/query", (req, res) => { Noto.queryItems(req, res) })
+app.post("/:bucket/sets/:set/query", (req, res) => { Noto.queryItems(req, res) })
 
 app.patch("/:bucket/sets/:set/items", (req, res) => { Noto.updateItems(req, res) })
 

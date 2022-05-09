@@ -261,11 +261,23 @@ class NotoDB {
 
         }
 
+        let select_clause = '*'
+
+        if(Object.keys(req.body).length > 0){
+            select_clause = ''
+            Object.keys(req.body).forEach((select_item, select_i) => {
+                select_clause = select_clause + select_item + '(' + (select_item !== "*" ? "s." : "") + req.body[select_item] + '),'
+            })
+        }
+
+        select_clause = select_clause.replace(/,\s*$/, "")
+
+        
         const params = {
             Bucket: req.params.bucket,
             Key: "_notodb/" + req.params.set,
             ExpressionType: 'SQL',
-            Expression: "SELECT * FROM S3Object[*][*] s " + where_clause,
+            Expression: "SELECT " + select_clause + " FROM S3Object[*][*] s " + where_clause,
             InputSerialization: {
                 JSON: {
                     Type: 'DOCUMENT',
