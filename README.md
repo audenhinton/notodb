@@ -22,7 +22,7 @@ GET /{bucket}/sets
 Create a new empty set in NotoDB.
 
 ```
-POST /{bucket}]/sets
+POST /{bucket}/sets
 
 {
     "name": "setName"
