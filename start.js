@@ -31,19 +31,19 @@ app.get("/", (req, res) => { Noto.about(req, res) })
 
 // S3 specific methods
 app.get("/buckets", (req, res) => { Noto.listBuckets(req, res) })
-app.get("/buckets/:bucket", (req, res) => { Noto.listBucketObjects(req, res) })
+app.get("/:bucket", (req, res) => { Noto.listBucketObjects(req, res) })
 
 // NotoDB specific methods
-app.get("/buckets/:bucket/sets", (req, res) => { Noto.listSets(req, res) })
-app.post("/buckets/:bucket/sets", (req, res) => { Noto.addSet(req, res) })
-app.delete("/buckets/:bucket/sets/:set", (req, res) => { Noto.removeSet(req, res) })
+app.get("/:bucket/sets", (req, res) => { Noto.listSets(req, res) })
+app.post("/:bucket/sets", (req, res) => { Noto.addSet(req, res) })
+app.delete("/:bucket/sets/:set", (req, res) => { Noto.removeSet(req, res) })
 
-app.get("/buckets/:bucket/sets/:set/items", (req, res) => { Noto.listItems(req, res) })
-app.post("/buckets/:bucket/sets/:set/items", (req, res) => { Noto.addItems(req, res) })
+app.get("/:bucket/sets/:set/items", (req, res) => { Noto.listItems(req, res) })
+app.post("/:bucket/sets/:set/items", (req, res) => { Noto.addItems(req, res) })
 
-app.get("/buckets/:bucket/sets/:set/query", (req, res) => { Noto.queryItems(req, res) })
+app.get("/:bucket/sets/:set/query", (req, res) => { Noto.queryItems(req, res) })
 
-app.patch("/buckets/:bucket/sets/:set/items", (req, res) => { Noto.updateItems(req, res) })
+app.patch("/:bucket/sets/:set/items", (req, res) => { Noto.updateItems(req, res) })
 
 if (isLambda) {
     module.exports.handler = serverless(app);

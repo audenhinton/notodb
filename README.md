@@ -10,41 +10,41 @@ GET /buckets
 List contents of a bucket in S3. Useful for testing connectivity.
 
 ```
-GET /buckets/[BUCKET NAME]
+GET /{bucket}
 ```
 
 List all sets in NotoDB. Think of sets as collections or tables.
 
 ```
-GET /buckets/[BUCKET NAME]/sets
+GET /{bucket}/sets
 ```
 
 Create a new empty set in NotoDB.
 
 ```
-POST /buckets/[BUCKET NAME]/sets
+POST /{bucket}]/sets
 
 {
-    "name": "[YOUR SET NAME]"
+    "name": "setName"
 }
 ```
 
 Delete a set
 
 ```
-DELETE /buckets/[BUCKET NAME]/sets
+DELETE /{bucket}/sets
 ```
 
 Get items from a set. Think of items as rows in a table, or documents in a collection.
 
 ```
-GET /buckets/[BUCKET NAME]/sets/[SET NAME]/items
+GET /{bucket}/sets/{set}/items
 ```
 
 Add new items to a set. Example payload. Data is stored in JSON documents, there is no limit to number of keys your items can have.
 
 ```
-POST /buckets/[BUCKET NAME]/sets/[SET NAME]/items
+POST /{bucket}/sets/{set}/items
 
 {
     "first_name": "John",
@@ -58,7 +58,7 @@ Update items in a set. Use URL parameters to filter which items to update. Use t
 **Caution**: updates can become prohibitively expensive on larger datasets. 
 
 ```
-PATCH /buckets/[BUCKET NAME]/sets/[SET NAME]/items?first_name=John
+PATCH /{bucket}/sets/{set}/items?first_name=John
 
 {
     "last_name": "McLovin"
@@ -68,7 +68,7 @@ PATCH /buckets/[BUCKET NAME]/sets/[SET NAME]/items?first_name=John
 Query or search for items in a set.
 
 ```
-GET /buckets/[BUCKET NAME]/sets/[SET NAME]/query?[KEY1]=[VALUE]&[KEY2]=[VALUE]
+GET /{bucket}/sets/{set}/query?{someKey1}={value}&{someKey2}={value}
 
 ```
 You can query against any top-level keys in your items. We are working on adding queries for nested items. You can also use operators for matching and compairing values. Below is a list of available operators and how to use them.
