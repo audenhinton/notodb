@@ -1,4 +1,51 @@
 
+# NotoDB
+
+A serverless, lightweight NoSQL database that sits on top of Amazon S3. 
+
+
+
+## Features
+
+- Use your Amazon S3 buckets for NotoDB data storage
+- NotoDB will allow you to create, read, update, and delete data sets stored in S3
+- Query nested items within your JSON files in the `_notodb` folder in your S3 bucket
+- You can add NotoDB to an existing S3 bucket
+- NotoDB is lightweight and built to run in a single AWS Lambda function
+- A hosted version of NotoDB will be available soon
+
+
+## Installation
+
+NotoDB is easy to install. Run the following in the project's root folder.
+
+```bash
+  npm install
+```
+
+To start the server run the following command. Your local server will be running on `http://localhost:8080`
+
+```bash
+  npm run start
+```
+
+If you would like to deploy NotoDB to lambda, you can run the following command. Make sure you have a lambda function running in your AWS instance with Node version 14+.
+
+```bash
+  npm run deploy
+```
+
+
+## Authentication
+
+To point NotoDB to your Amazon S3 bucket, include the following headers in your http requests to the API.
+
+`x-access-key-id` - your IAM user's access Key ID
+
+`x-secret-access-key` - your IAM user's secrect access key
+
+
+
 ## API methods & endpoints
 
 List buckets in S3. Useful for testing connectivity.
@@ -22,7 +69,7 @@ GET /{bucket}/sets
 Create a new empty set in NotoDB.
 
 ```
-POST /{bucket}]/sets
+POST /{bucket}/sets
 
 {
     "name": "setName"
