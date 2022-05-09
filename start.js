@@ -10,8 +10,8 @@ const app = express()
 app.use((req, res, next) => {
 
     // check if any required parameters are missing from the request
-    if (!req.headers["x-access-key-id"]) res.status(400).send({ "message": "Missing x-accessKeyId header" })
-    if (!req.headers["x-secret-access-key"]) res.status(400).send({ "message": "Missing x-secretAccessKey header" })
+    if (!req.headers["x-access-key-id"]) res.status(400).send({ "message": "Missing x-access-key-id header" })
+    if (!req.headers["x-secret-access-key"]) res.status(400).send({ "message": "Missing x-secret-access-key header" })
 
     Noto = new NotoDB(app, config = {
         accessKeyId: req.headers["x-access-key-id"],
@@ -25,7 +25,7 @@ app.use((req, res, next) => {
 
 })
 app.use(express.urlencoded());
-app.use(express.json());      // if needed
+app.use(express.json());
 
 app.get("/", (req, res) => { Noto.about(req, res) })
 
