@@ -207,52 +207,47 @@ class NotoDB {
             Object.keys(req.query).forEach((item, index) => {
 
                 let needle = req.query[item]
-                let operator = ` = '${needle}' `
-
-                // check to make sure we are comparing the correct type (string, int, float)
-                if (parseInt(needle)) operator = ` = ${needle} `
-                if (parseFloat(needle)) operator = ` = ${needle} `
+                let operator = (needle.match(/^-?[0-9]\d*(\.\d+)?$/)) ? ` = ${needle} ` : ` = '${needle}' ` 
 
                 // check for comparison operators
                 if (needle.indexOf(":") > -1) {
 
+                    let value = needle.split(":")[1]
+
                     switch (needle.split(":")[0]) {
 
                         case "like":
-                            operator = ` LIKE '%${needle.split(":")[1]}%' `
+                            operator = ` LIKE '%${value}%' `
                             break;
 
                         case "start":
-                            operator = ` LIKE '${needle.split(":")[1]}%' `
+                            operator = ` LIKE '${value}%' `
                             break;
 
                         case "end":
-                            operator = ` LIKE '%${needle.split(":")[1]}' `
+                            operator = ` LIKE '%${value}' `
                             break;
 
                         case "gt":
-                            operator = ` > ${needle.split(":")[1]} `
+
+                            operator = (value.match(/^-?[0-9]\d*(\.\d+)?$/)) ? ` > ${value} ` : ` > '${value}' `
+
                             break;
 
                         case "lt":
-                            operator = ` < ${needle.split(":")[1]} `
+
+                            operator = (value.match(/^-?[0-9]\d*(\.\d+)?$/)) ? ` < ${value} ` : ` < '${value}' `
+
                             break;
 
                         case "gte":
-
-                            // these need validation so that users can only use these operators on int & float
-
-                            operator = ` >= '${needle.split(":")[1]}' `
-                            if (parseInt(needle)) operator = ` >= ${needle} `
-                            if (parseFloat(needle)) operator = ` >= ${needle} `
+                            operator = (value.match(/^-?[0-9]\d*(\.\d+)?$/)) ? ` >= ${value} ` : ` >= '${value}' `
 
                             break;
 
                         case "lte":
 
-                            operator = ` <= '${needle.split(":")[1]}' `
-                            if (parseInt(needle)) operator = ` <= ${needle} `
-                            if (parseFloat(needle)) operator = ` <= ${needle} `
+                            operator = (value.match(/^-?[0-9]\d*(\.\d+)?$/)) ? ` <= ${value} ` : ` <= '${value}' `
 
                             break;
 
@@ -283,10 +278,16 @@ class NotoDB {
             }
         }
 
-
         this.s3.selectObjectContent(params, function (err, data) {
 
             let records = []
+
+            console.log(where_clause)
+
+            if(err){
+                console.log(err)
+                console.log(where_clause)
+            }
 
             data.Payload.on('data', (event) => {
 
