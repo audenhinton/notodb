@@ -40,7 +40,7 @@ class NotoDB {
                 })
             }
 
-            res.send(data)
+            res.send(data.Buckets)
 
         });
 
@@ -77,7 +77,17 @@ class NotoDB {
                 })
             }
 
-            res.send(data.Contents)
+            let sets = []
+
+            data.Contents.forEach((item) => {
+                sets.push({
+                    "Name": item.Key.replace("_notodb/", ""),
+                    "LastModified": item.LastModified,
+                    "Size": item.Size
+                })
+            })
+
+            res.send(sets)
 
         });
 

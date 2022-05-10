@@ -7,7 +7,22 @@ const isLambda = !!process.env.LAMBDA_TASK_ROOT;
 
 const app = express()
 
+// app.options("/*", function(req, res, next){
+//     res.header('Access-Control-Allow-Origin', '*');
+//     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+//     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With, x-access-key-id, x-secret-access-key');
+//     res.send(200);
+// });
+
 app.use((req, res, next) => {
+
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With, x-access-key-id, x-secret-access-key');
+
+    if(req.method == "OPTIONS"){
+        res.sendStatus(200);
+    }
 
     // check if any required parameters are missing from the request
     if (!req.headers["x-access-key-id"]) res.status(400).send({ "message": "Missing x-access-key-id header" })
