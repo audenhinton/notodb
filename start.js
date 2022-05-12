@@ -59,6 +59,7 @@ app.put("/:bucket/sets/:set/items", (req, res) => { Noto.addItems(req, res) })
 app.post("/:bucket/sets/:set/query", (req, res) => { Noto.queryItems(req, res) })
 
 app.patch("/:bucket/sets/:set/items", (req, res) => { Noto.updateItems(req, res) })
+app.delete("/:bucket/sets/:set/items", (req, res) => { Noto.removeItems(req, res) })
 
 if (isLambda) {
     module.exports.handler = serverless(app);

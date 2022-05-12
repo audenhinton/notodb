@@ -1,4 +1,7 @@
 const S3 = require('aws-sdk/clients/s3')
+const nanoid1 = require('nanoid')
+const nanoid = nanoid1.customAlphabet('1234567890abcdefghijklmnopqrstuvwxyz', 16)
+
 
 class NotoDB {
 
@@ -181,6 +184,23 @@ class NotoDB {
             }
 
             let items = JSON.parse(data.Body.toString())
+
+            // check system attributes
+            items.forEach((item, i) => {
+                items[i]._id = (items[i]._id) ? items[i]._id : nanoid()
+                items[i]._createdAt = (items[i]._createdAt) ? items[i]._createdAt : Date.now()
+                items[i]._updatedAt = (items[i]._updatedAt) ? items[i]._updatedAt : Date.now()
+            })
+
+            Object.keys(req.body).forEach((key) => {
+                if(key.startsWith("_")){
+                    delete req.body[key]
+                }
+            })
+
+            req.body._id = nanoid()
+            req.body._createdAt = Date.now()
+            req.body._updatedAt = Date.now()
 
             items.push(req.body)
 
@@ -369,11 +389,18 @@ class NotoDB {
                 if (match && req.body) {
                     update_count++
                     Object.keys(req.body).forEach((update_item, update_i) => {
-                        items[i][update_item] = req.body[update_item]
-                        if(!req.body[update_item]) delete(items[i][update_item])
+                        if(!update_item.startsWith("_")){
+                            items[i][update_item] = req.body[update_item]
+                            items[i]._updatedAt = Date.now()
+                            if(!req.body[update_item]) delete(items[i][update_item])
+                        }
                     })
 
                 }
+
+                item._id = (item._id) ? item._id : nanoid()
+                item._createdAt = (item._createdAt) ? item._createdAt : Date.now()
+                item._updatedAt = (item._updatedAt) ? item._updatedAt : Date.now()
 
                 if (count_i === count - 1) {
 
@@ -392,6 +419,84 @@ class NotoDB {
 
                         res.send({
                             "message": `Updated ${update_count} item${(update_count === 1) ? "" : "s"} out of ${count_i + 1} scanned items.`
+                        })
+
+                    });
+
+                } else {
+                    count_i++
+                }
+
+            })
+
+
+        });
+
+    }
+
+    removeItems(req, res) {
+
+        var self = this;
+
+        self.s3.getObject({
+            Bucket: req.params.bucket,
+            Key: "_notodb/" + req.params.set
+        }, function (err, data) {
+
+            if (err) {
+                return res.status(400).send({
+                    message: err.code
+                })
+            }
+
+            var items = JSON.parse(data.Body.toString())
+            var update_count = 0
+            var count = items.length
+            var count_i = 0
+
+            var to_delete = []
+
+            items.forEach((item, i) => {
+
+                let match = true
+
+                // check if filters need to be applied to only update select items
+                if (req.query) {
+                    Object.keys(req.query).forEach((query_item, query_i) => {
+                        if (item[query_item] != req.query[query_item]) match = false;
+                    })
+                } else {
+                    res.status(400).send({
+                        "message": `You must provide at least one filter parameter.`
+                    })
+                }
+
+                if (match) {
+                    update_count++
+                    to_delete.push(i)
+                }
+
+                if (count_i === count - 1) {
+
+                    to_delete.forEach((i) => {
+                        items.splice(i, 1)
+                    })
+
+                    // updates have been made - reupload the set
+                    self.s3.putObject({
+                        Bucket: req.params.bucket,
+                        Key: "_notodb/" + req.params.set,
+                        Body: JSON.stringify(items)
+                    }, function (err, data) {
+
+                        if (err) {
+                            return res.status(400).send({
+                                message: err.code
+                            })
+                        }
+
+                        res.send({
+                            "message": `Deleted ${update_count} item${(update_count === 1) ? "" : "s"} out of ${count_i + 1} scanned items.`
                         })
 
                     });
