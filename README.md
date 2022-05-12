@@ -79,7 +79,7 @@ PUT /{bucket}/sets
 Delete a set
 
 ```
-DELETE /{bucket}/sets
+DELETE /{bucket}/sets/{set}
 ```
 
 Get items from a set. Think of items as rows in a table, or documents in a collection.
