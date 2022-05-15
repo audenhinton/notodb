@@ -46,6 +46,7 @@ app.get("/", (req, res) => { Noto.about(req, res) })
 
 // S3 specific methods
 app.get("/buckets", (req, res) => { Noto.listBuckets(req, res) })
+app.put("/buckets", (req, res) => { Noto.createBucket(req, res) })
 app.get("/:bucket", (req, res) => { Noto.listBucketObjects(req, res) })
 
 // NotoDB specific methods

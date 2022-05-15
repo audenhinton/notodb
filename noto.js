@@ -49,6 +49,26 @@ class NotoDB {
 
     }
 
+    createBucket(req, res) {
+
+        this.s3.createBucket({
+            Bucket: req.body.name
+        },function (err, data) {
+
+            if (err) {
+                return res.status(400).send({
+                    message: err.code
+                })
+            }
+
+            res.send({
+                "message": "Created bucket"
+            })
+
+        });
+
+    }
+
     listBucketObjects(req, res) {
 
         this.s3.listObjectsV2({
