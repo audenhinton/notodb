@@ -267,15 +267,15 @@ class NotoDB {
                     switch (needle.split(":")[0]) {
 
                         case "like":
-                            operator = ` LIKE "%${value}%" `
+                            operator = ` LIKE '%${value}%' `
                             break;
 
                         case "start":
-                            operator = ` LIKE "${value}%" `
+                            operator = ` LIKE '${value}%' `
                             break;
 
                         case "end":
-                            operator = ` LIKE "%${value}" `
+                            operator = ` LIKE '%${value}' `
                             break;
 
                         case "gt":
