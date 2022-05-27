@@ -267,15 +267,15 @@ class NotoDB {
                     switch (needle.split(":")[0]) {
 
                         case "like":
-                            operator = ` LIKE '%${value}%' `
+                            operator = ` LIKE "%${value}%" `
                             break;
 
                         case "start":
-                            operator = ` LIKE '${value}%' `
+                            operator = ` LIKE "${value}%" `
                             break;
 
                         case "end":
-                            operator = ` LIKE '%${value}' `
+                            operator = ` LIKE "%${value}" `
                             break;
 
                         case "gt":
@@ -305,7 +305,7 @@ class NotoDB {
 
                 }
 
-                where_clause = where_clause + ((index === 0) ? "" : "AND") + " s." + item + operator
+                where_clause = where_clause + ((index === 0) ? "" : "AND") + " s.\"" + item + "\"" + operator
 
             });
 
@@ -322,6 +322,7 @@ class NotoDB {
 
         select_clause = select_clause.replace(/,\s*$/, "")
 
+        console.log("SELECT " + select_clause + " FROM S3Object[*][*] s " + where_clause)
         
         const params = {
             Bucket: req.params.bucket,
@@ -366,6 +367,8 @@ class NotoDB {
                 let results = Buffer.concat(records).toString('utf8');
                 results = results.replace(/\,$/, '');
                 results = `[${results}]`;
+
+                results = results || []
 
                 res.send(results)
 
